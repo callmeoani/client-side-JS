@@ -78,3 +78,114 @@ function handleClickedValue(input, buttonId) {
     }
   }
 }
+
+let data = "2+3.4*4.4*2.2/2-6.2/2*4";
+let dataArr = [...data];
+console.log(dataArr);
+
+const calculatorObj = {
+  operatorsList: ["*", "/", "%", "+", "-"],
+
+  parseTheNumbers(data) {
+    let parsedArr = [];
+    for (let val of data) {
+      if (isNaN(val)) {
+        parsedArr.push(val);
+      } else {
+        parsedArr.push(Number(val));
+      }
+    }
+
+    return parsedArr;
+  },
+
+  segmentDataAndParseNumbers(data) {
+    let finalArr = [];
+    let tempChunk = "";
+    for (let val of data) {
+      if (val === "." || !isNaN(parseInt(val))) {
+        tempChunk += val;
+      } else {
+        finalArr.push(tempChunk);
+        tempChunk = "";
+        finalArr.push(val);
+      }
+    }
+    if (tempChunk.length) {
+      finalArr.push(tempChunk);
+      tempChunk = "";
+    }
+    return this.parseTheNumbers(finalArr);
+  },
+
+  calculate(operator, paramA, paramB) {
+    let result;
+    switch (operator) {
+      case "*":
+        result = paramA * paramB;
+        break;
+      case "/":
+        result = paramA / paramB;
+        break;
+      case "%":
+        result = paramA % paramB;
+        break;
+      case "+":
+        result = paramA + paramB;
+        break;
+      case "-":
+        result = paramA - paramB;
+        break;
+      default:
+        throw new Error("Operation not recognize!");
+    }
+    return result;
+  },
+
+  handleProductLevelOperations(data, operator) {
+    let newArray = [];
+    let indexesToJump = [];
+    for (let [index, value] of data.entries()) {
+      if (indexesToJump.includes(index)) {
+        continue;
+      }
+      if (value !== operator) {
+        newArray.push(value);
+      } else {
+        if (typeof data[index + 1] === "number") {
+          let calcResult = this.calculate(
+            operator,
+            newArray[newArray.length - 1],
+            data[index + 1]
+          );
+          newArray.pop();
+          newArray.push(calcResult);
+          indexesToJump.push(index + 1);
+        } else {
+          throw new Error("Syntax error somewhere!");
+        }
+      }
+    }
+
+    return newArray;
+  },
+
+  handleCalculations(data) {
+    let result = data;
+    for (let operator of this.operatorsList) {
+      result = this.handleProductLevelOperations(result, operator);
+    }
+    return result;
+  },
+};
+
+function solve(dataArr) {
+  const segMentedData = calculatorObj.segmentDataAndParseNumbers(dataArr);
+  const solutionResult = calculatorObj.handleCalculations(segMentedData);
+  if (solutionResult.length !== 1) {
+    throw new Error("Something is wrong with the calculation");
+  }
+  return solutionResult[0];
+}
+
+console.log(solve(data));
