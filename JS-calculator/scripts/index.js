@@ -12,6 +12,8 @@ let calculatorState = powerButton.value;
 let totalInputString = "0";
 questionElement.textContent = totalInputString;
 
+let cursorSelectedVisual = totalInputString[totalInputString.length - 1];
+
 // add click event to each button
 
 for (let button of allButtons) {
@@ -22,6 +24,10 @@ for (let button of allButtons) {
     console.log("clicked id: ", ClickedButtonId);
     handleClickedValue(clickedValue, ClickedButtonId);
   });
+}
+
+function handleCursorSelection() {
+  // do this tomorrow
 }
 
 function handleClickedValue(input, buttonId) {
@@ -45,6 +51,7 @@ function handleClickedValue(input, buttonId) {
       } else {
         calculatorState = "off";
         questionElement?.classList.add("off");
+        answerDisplay.classList.add("off");
       }
     } else {
       switch (input) {
@@ -86,10 +93,6 @@ function handleClickedValue(input, buttonId) {
     }
   }
 }
-
-// let data = "2+3.4*4.4*2.2/2-6.2/2*4";
-// let dataArr = [...data];
-// console.log(dataArr);
 
 const calculatorObj = {
   operatorsList: ["*", "/", "%", "-", "+"],
@@ -195,5 +198,3 @@ function solve(dataArr) {
   }
   return solutionResult[0];
 }
-
-// console.log(solve(totalInputString));
