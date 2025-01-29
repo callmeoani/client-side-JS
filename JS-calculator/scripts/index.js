@@ -2,13 +2,14 @@ let buttonsContainer = document.querySelector(".buttons-container");
 let screen = document.querySelector(".screen");
 let questionElement = document.querySelector("#question");
 let answerDisplay = document.querySelector(".answer-display");
+let answer = document.querySelector("#answer");
+let equalToButton = document.querySelector("#equalTo");
 let allButtons = buttonsContainer.children;
 
 let powerButton = document.querySelector("#buttonPower");
 let calculatorState = powerButton.value;
 
 let totalInputString = "0";
-let totalInputNumber = 0;
 questionElement.textContent = totalInputString;
 
 // add click event to each button
@@ -65,9 +66,16 @@ function handleClickedValue(input, buttonId) {
           break;
 
         case "cancel":
+          totalInputString = "0";
+          questionElement.textContent = totalInputString;
+          answerDisplay.classList.add("off");
           break;
 
         case "=":
+          const finalAnswer = solve(totalInputString);
+          console.log(finalAnswer);
+          answer.textContent = finalAnswer;
+          answerDisplay.classList.remove("off");
           break;
 
         default:
@@ -79,12 +87,12 @@ function handleClickedValue(input, buttonId) {
   }
 }
 
-let data = "2+3.4*4.4*2.2/2-6.2/2*4";
-let dataArr = [...data];
-console.log(dataArr);
+// let data = "2+3.4*4.4*2.2/2-6.2/2*4";
+// let dataArr = [...data];
+// console.log(dataArr);
 
 const calculatorObj = {
-  operatorsList: ["*", "/", "%", "+", "-"],
+  operatorsList: ["*", "/", "%", "-", "+"],
 
   parseTheNumbers(data) {
     let parsedArr = [];
@@ -188,4 +196,4 @@ function solve(dataArr) {
   return solutionResult[0];
 }
 
-console.log(solve(data));
+// console.log(solve(totalInputString));
