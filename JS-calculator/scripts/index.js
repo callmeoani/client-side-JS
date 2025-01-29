@@ -7,6 +7,10 @@ let allButtons = buttonsContainer.children;
 let powerButton = document.querySelector("#buttonPower");
 let calculatorState = powerButton.value;
 
+let totalInputString = "0";
+let totalInputNumber = 0;
+questionElement.textContent = totalInputString;
+
 // add click event to each button
 
 for (let button of allButtons) {
@@ -20,13 +24,20 @@ for (let button of allButtons) {
 }
 
 function handleClickedValue(input, buttonId) {
+  if (totalInputString.length === 1 && totalInputString[0] === "0") {
+    totalInputString = "";
+  }
+
   if (!isNaN(input)) {
     // is a number
-    let value = parseInt(input);
+    console.log("length of total input string: ", totalInputString.length);
+    totalInputString += input;
+    questionElement.textContent = totalInputString;
   } else {
     // is not a number
     if (buttonId === "buttonPower") {
-      console.log("did we get here?", "the questionElement: ", questionElement);
+      totalInputString = "0";
+      questionElement.textContent = totalInputString;
       if (calculatorState === "off") {
         calculatorState = "on";
         questionElement?.classList.remove("off");
@@ -36,10 +47,32 @@ function handleClickedValue(input, buttonId) {
       }
     } else {
       switch (input) {
-        case "":
+        case "delete":
+          totalInputString = totalInputString.substring(
+            0,
+            totalInputString.length - 1
+          );
+          if (totalInputString.length === 0) {
+            totalInputString = "0";
+          }
+          questionElement.textContent = totalInputString;
+          break;
+
+        case "moveLeft":
+          break;
+
+        case "moveRight":
+          break;
+
+        case "cancel":
+          break;
+
+        case "=":
           break;
 
         default:
+          totalInputString += input;
+          questionElement.textContent = totalInputString;
           break;
       }
     }
